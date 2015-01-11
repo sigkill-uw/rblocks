@@ -1,3 +1,21 @@
+/*
+	video.c - internal rendering for rblocks.
+	Copyright (C) 2015 Adam Richardson
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #define _VIDEO_C_
 
 #include <stdint.h>
@@ -63,8 +81,15 @@ void video_render(SDL_Renderer *r, gamestate_t *g)
 	re.x = re.y = 0;
 	re.w = re.h = 50;
 
-	font_write(r, "PYROTECHNICK", 0, 0, 10);
-	font_write(r, "SDL 2", 0, 50, 10);
+	font_write(r, "ABCDEFGHIJKLM", 0, 0, 32);
+	font_write(r, "NOPQRSTUVWXYZ", 0, 50, 32);
+	font_write(r, "0123456789", 0, 100, 32);
+	font_write(r, "ABCDEFGHIJKLM", 0, 150, 16);
+	font_write(r, "NOPQRSTUVWXYZ", 0, 200, 16);
+	font_write(r, "0123456789", 0, 250, 16);
+	font_write(r, "ABCDEFGHIJKLM", 0, 300, 8);
+	font_write(r, "NOPQRSTUVWXYZ", 0, 350, 8);
+	font_write(r, "0123456789", 0, 400, 8);
 
 	SDL_RenderPresent(r);
 }
