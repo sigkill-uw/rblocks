@@ -36,8 +36,9 @@ const int margin = 25;
 
 const int block_size = 25;
 
-const color_t c_backdrop = {0xff, 0x07, 0x1B, 0x30};
-const color_t c_grid = {0xff, 0x10, 0x20, 0x50};
+const color_t c_backdrop =	{0xff, 0x07, 0x1B, 0x30};
+const color_t c_grid =		{0xff, 0x10, 0x20, 0x50};
+const color_t c_mbox =		{0x99, 0x00, 0x00, 0x00};
 
 inline void set_renderer_color(SDL_Renderer *r, const color_t * const c);
 
@@ -46,8 +47,9 @@ void video_render(SDL_Renderer *r, gamestate_t *g)
 	int i, j;
 	SDL_Rect re;
 
-	g = NULL;
-	if(g){}
+	g = g;
+
+	SDL_ClearError();
 
 	set_renderer_color(r, &c_backdrop);
 	SDL_RenderClear(r);
@@ -78,20 +80,14 @@ void video_render(SDL_Renderer *r, gamestate_t *g)
 		re.y += block_size;
 	}
 
-	re.x = re.y = 0;
-	re.w = re.h = 50;
-
-	font_write(r, "ABCDEFGHIJKLM", 0, 0, 32);
-	font_write(r, "NOPQRSTUVWXYZ", 0, 50, 32);
-	font_write(r, "0123456789", 0, 100, 32);
-	font_write(r, "ABCDEFGHIJKLM", 0, 150, 16);
-	font_write(r, "NOPQRSTUVWXYZ", 0, 200, 16);
-	font_write(r, "0123456789", 0, 250, 16);
-	font_write(r, "ABCDEFGHIJKLM", 0, 300, 8);
-	font_write(r, "NOPQRSTUVWXYZ", 0, 350, 8);
-	font_write(r, "0123456789", 0, 400, 8);
+	font_write(r, "NEXT", 2 * margin + block_size * bucket_width, margin + 5, 16);
+	font_write(r, "HOLD", 2 * margin + block_size * bucket_width, 3 * margin + 4 * block_size + 5, 16);
+	font_write(r, "SCORE", 2 * margin + block_size * bucket_width, 5 * margin + 8 * block_size + 5, 16);
+	font_write(r, "000000000", 2 * margin + block_size * bucket_width, 5 * margin + 8 * block_size + 16 + 10, 16);
 
 	SDL_RenderPresent(r);
+
+	sdl_errdie("Failed to render");
 }
 
 inline void set_renderer_color(SDL_Renderer *r, const color_t * const c)

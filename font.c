@@ -32,6 +32,8 @@ void font_init(SDL_Renderer *r)
 	int i, j, k;
 	uint16_t buffer[internal_size * internal_size];
 
+	SDL_ClearError();
+
 	for(i = 128; i --;)
 	{
 		font[i] = SDL_CreateTexture(r, SDL_PIXELFORMAT_ARGB4444, SDL_TEXTUREACCESS_STATIC, internal_size, internal_size);
@@ -43,19 +45,27 @@ void font_init(SDL_Renderer *r)
 
 		SDL_UpdateTexture(font[i], NULL, (const void *)buffer, 2 * internal_size);
 	}
+
+	sdl_errdie("Couldn't initialize font");
 }
 
 void font_quit(void)
 {
 	int i;
 
+	SDL_ClearError();
+
 	for(i = 128; i --;)
 		SDL_DestroyTexture(font[i]);
+
+	sdl_errdie("Couldn't deallocate font");
 }
 
 void font_write(SDL_Renderer *r, const char *str, int x, int y, int size)
 {
 	SDL_Rect re;
+
+	SDL_ClearError();
 
 	re.x = x;
 	re.y = y;
@@ -67,4 +77,6 @@ void font_write(SDL_Renderer *r, const char *str, int x, int y, int size)
 		SDL_RenderCopy(r, font[(int)*str], NULL, &re);
 		re.x += size;
 	}
+
+	sdl_errdie("Couldn't render text");
 }

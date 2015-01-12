@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <SDL.h>
+
 #include "common.h"
 
 void die(const char *msg)
@@ -13,6 +15,15 @@ void die(const char *msg)
 	fputs(msg, stderr);
 	fputc('\n', stderr);
 	exit(1);
+}
+
+void sdl_errdie(const char *msg)
+{
+	const char *foo;
+
+	foo = SDL_GetError();
+	if(foo && *foo)
+		die(msg);
 }
 
 void prtime(void)

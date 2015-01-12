@@ -27,7 +27,7 @@
 #include "nap.h"
 #include "font.h"
 
-const int window_width = 800;
+const int window_width = 460;
 const int window_height = 550;
 
 const int frame_duration = 40;
