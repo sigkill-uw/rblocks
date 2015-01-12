@@ -20,7 +20,7 @@ CC = gcc
 SOURCE = main.c game.c video.c nap.c common.c font.c icon.c
 OBJECTS = $(SOURCE:.c=.o)
 OUTPUT = rblocks
-CFLAGS = `sdl2-config --cflags --libs` -Wall -Wextra -Werror -O4 -std=c99 -pedantic
+CFLAGS = -Wall -Wextra -Werror -O4 -std=c99 -pedantic `sdl2-config --cflags --libs`
 
 .PHONY: all
 .PHONY: clean
@@ -28,7 +28,7 @@ CFLAGS = `sdl2-config --cflags --libs` -Wall -Wextra -Werror -O4 -std=c99 -pedan
 all: $(OUTPUT)
 
 $(OUTPUT): $(OBJECTS)
-	$(CC) $(CFLAGS) -o $(OUTPUT) $(OBJECTS)
+	$(CC) -o $(OUTPUT) $(OBJECTS) $(CFLAGS)
 
 #Object files are built from .c files; a change in the correspending header is equally important
 %.o: %.c %.h
