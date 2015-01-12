@@ -1,5 +1,5 @@
 /*
-	common.c - utility functions for rblocks.
+	icon.h - header file for icon-setting helper function.
 	Copyright (C) 2015 Adam Richardson
 
 	This program is free software: you can redistribute it and/or modify
@@ -16,46 +16,9 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define _COMMON_C_
+#ifndef _ICON_H_
+#define _ICON_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+void set_icon(SDL_Window *window);
 
-#include <SDL.h>
-
-#include "common.h"
-
-void die(const char *msg)
-{
-	prftime(stderr);
-	fputs("Fatal error: ", stderr);
-	fputs(msg, stderr);
-	fputc('\n', stderr);
-	exit(1);
-}
-
-void sdl_errdie(const char *msg)
-{
-	const char *foo;
-
-	foo = SDL_GetError();
-	if(foo && *foo)
-		die(msg);
-}
-
-void prtime(void)
-{
-	prftime(stdout);
-}
-
-void prftime(FILE *f)
-{
-	time_t now;
-	char buffer[10 + 1 + 1]; /* "[xx:xx:xx] " */
-
-	now = time(NULL);
-
-	strftime(buffer, 12, "[%T] ", localtime(&now));
-	fputs(buffer, f);
-}
+#endif

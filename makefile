@@ -17,7 +17,7 @@
 ####
 
 CC = gcc
-SOURCE = main.c game.c video.c nap.c common.c font.c
+SOURCE = main.c game.c video.c nap.c common.c font.c icon.c
 OBJECTS = $(SOURCE:.c=.o)
 OUTPUT = rblocks
 CFLAGS = `sdl2-config --cflags --libs` -Wall -Wextra -Werror -O4 -std=c99 -pedantic
@@ -30,14 +30,18 @@ all: $(OUTPUT)
 $(OUTPUT): $(OBJECTS)
 	$(CC) $(CFLAGS) -o $(OUTPUT) $(OBJECTS)
 
+#Object files are built from .c files; a change in the correspending header is equally important
 %.o: %.c %.h
 	$(CC) $(CFLAGS) -c $<
 
-font.o: font.c fontdef.h
+#font.o is special, since fontdef is auto-generated and defies the naming convention
+font.o: font.c font.h fontdef.h
 	$(CC) $(CFLAGS) -c font.c
 
+#fontdef.h is special also
 fontdef.h: fontdef.txt fontgen.py
 	python2 fontgen.py < fontdef.txt > fontdef.h
 
+#Nuke everything, don't die on error
 clean:
 	-rm $(OUTPUT) $(OBJECTS) fontdef.h

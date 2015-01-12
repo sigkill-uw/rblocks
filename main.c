@@ -26,6 +26,7 @@
 #include "common.h"
 #include "nap.h"
 #include "font.h"
+#include "icon.h"
 
 const int window_width = 460;
 const int window_height = 550;
@@ -58,6 +59,8 @@ int main(void)
 	
 	if(!window)
 		die("Couldn't create window");
+
+	set_icon(window);
 
 	prtime(); puts("Spawned a window");
 

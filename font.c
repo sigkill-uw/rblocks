@@ -51,14 +51,17 @@ void font_init(SDL_Renderer *r)
 
 void font_quit(void)
 {
-	int i;
+	/* I think that nuking the renderer in main actually deallocates all the textures already,
+	   considering that this function consistently threw "Invalid texture" errors. */
+
+	/*int i;
 
 	SDL_ClearError();
 
 	for(i = 128; i --;)
 		SDL_DestroyTexture(font[i]);
 
-	sdl_errdie("Couldn't deallocate font");
+	sdl_errdie("Couldn't deallocate font"); */
 }
 
 void font_write(SDL_Renderer *r, const char *str, int x, int y, int size)
