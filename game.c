@@ -18,10 +18,14 @@
 
 #define _GAME_C_
 
+#include <stdint.h>
 #include "game.h"
 
-const int bucket_width = 10;
-const int bucket_height = 20;
+void gamestate_init(gamestate_t *g)
+{
+	g = 0;
+	if(g){}
+}
 
 void gamestate_tick(gamestate_t *g)
 {

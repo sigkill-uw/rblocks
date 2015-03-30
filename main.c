@@ -28,10 +28,12 @@
 #include "font.h"
 #include "icon.h"
 
-const int window_width = 460;
-const int window_height = 550;
+/* Rendering code is, in theory, agnostic to these */
+#define WINDOW_WIDTH 460
+#define WINDOW_HEIGHT 550
 
-const int frame_duration = 40;
+/* ms per tick */
+#define FRAME_DURATION 25
 
 int main(void)
 {
@@ -44,46 +46,65 @@ int main(void)
 	prtime(); puts("rblocks - an open source, cross-platform arcade game written in C");
 	prtime(); puts("Written by sigkill for rcode. Built on " __DATE__ " at " __TIME__);
 
+	/* Intialize SDL */
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 		die("Couldn't initialize SDL");
 
+	/* Queue up the SDL cleanup function. I feel like this is a little useless but whatever */
 	if(atexit(SDL_Quit))
 		die("Couldn't queue cleanup mechanism");
 
+	/* Make a window */
 	window = SDL_CreateWindow(
 		"rblocks",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		window_width, window_height,
+		WINDOW_WIDTH, WINDOW_HEIGHT,
 		SDL_WINDOW_OPENGL);
 	
 	if(!window)
 		die("Couldn't create window");
 
+	/* Set the icon - errors handled within */
 	set_icon(window);
 
 	prtime(); puts("Spawned a window");
 
+	/* Create the renderer */
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	if(!renderer)
 		die("Couldn't create renderer");
 
 	prtime(); puts("Created a renderer");
 
+	/* Initialize fonts and queue font cleanup */
 	font_init(renderer);
-	atexit(font_quit);
+	if(atexit(SDL_Quit))
+		die("Couldn't queue cleanup mechanism");
 
-	timer = (int)SDL_GetTicks() + frame_duration;
+	/* Initialize other video stuff - errors handled within */
+	video_init(renderer);
+
+	prtime(); puts("Initialized video assets");
+
+	/* Initialize gamestate */
+	gamestate_init(&game);
+
+	/* Loop runs once every `FRAME_DURATION` millseconds;
+	  	I'm told that it's good practice to run game logic and rendering independently,
+		but for these purposes (small, discrete state changes) rendering is useless in the absence game logic. */
+	timer = (int)SDL_GetTicks() + FRAME_DURATION;
 	for(;;)
 	{
+		/* Event loop */
 		while(SDL_PollEvent(&ev))
 		{
-			if(ev.type == SDL_QUIT)
+			if(ev.type == SDL_QUIT) /* Quit message */
 			{
 				prtime(); puts("Received quit signal");
 				break;
 			}
-			else if(ev.type == SDL_KEYDOWN)
+			else if(ev.type == SDL_KEYDOWN) /* Keydown message */
 			{
 				;
 			}
@@ -92,14 +113,21 @@ int main(void)
 		if(ev.type == SDL_QUIT)
 			break;
 
+		/* Advance the state by a single frame */
 		gamestate_tick(&game);
+
+		/* Render it */
 		video_render(renderer, NULL);
 
+		/* Stall and increment timer. Should be self-correcting. */
 		nap(timer - (int)SDL_GetTicks());
 		while((int)SDL_GetTicks() < timer);
-		timer += frame_duration;
+		timer += FRAME_DURATION;
 	}
 
+	/* Destroy our local properties. Font cleanup and SDL cleanup should happen implicitly via atexit */
+	video_quit();
+	font_quit();
 	SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 

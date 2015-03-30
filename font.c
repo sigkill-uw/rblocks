@@ -37,7 +37,7 @@ void font_init(SDL_Renderer *r)
 	for(i = 128; i --;)
 	{
 		font[i] = SDL_CreateTexture(r, SDL_PIXELFORMAT_ARGB4444, SDL_TEXTUREACCESS_STATIC, internal_size, internal_size);
-		SDL_SetTextureBlendMode(font[i], SDL_BLENDMODE_BLEND);
+		SDL_SetTextureBlendMode(font[i], SDL_BLENDMODE_NONE);
 
 		for(j = 0; j < internal_size; j ++)
 			for(k = internal_size; k --;)
@@ -64,14 +64,23 @@ void font_quit(void)
 	sdl_errdie("Couldn't deallocate font"); */
 }
 
-void font_write(SDL_Renderer *r, const char *str, int x, int y, int size)
+SDL_Texture *font_render(SDL_Renderer *r, const char *str, int size)
 {
 	SDL_Rect re;
+	SDL_Texture *tex;
 
 	SDL_ClearError();
 
-	re.x = x;
-	re.y = y;
+	tex = SDL_CreateTexture(r, SDL_PIXELFORMAT_ARGB4444, SDL_TEXTUREACCESS_TARGET, size * strlen(str), size);
+	if(!tex)
+		die("Couldn't render text");
+
+	SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
+
+	SDL_SetRenderTarget(r, tex);
+
+	re.x = 0;
+	re.y = 0;
 	re.w = size;
 	re.h = size;
 
@@ -80,6 +89,26 @@ void font_write(SDL_Renderer *r, const char *str, int x, int y, int size)
 		SDL_RenderCopy(r, font[(int)*str], NULL, &re);
 		re.x += size;
 	}
+
+	SDL_SetRenderTarget(r, NULL);
+
+	sdl_errdie("Couldn't render text");
+
+	return tex;
+}
+
+/* This is just a wrapper around SDL_RenderCopy */
+void font_blit(SDL_Renderer *r, SDL_Texture *text, int x, int y)
+{
+	SDL_Rect re;
+
+	SDL_ClearError();
+
+	re.x = x;
+	re.y = y;
+	SDL_QueryTexture(text, NULL, NULL, &re.w, &re.h);
+
+	SDL_RenderCopy(r, text, NULL, &re);
 
 	sdl_errdie("Couldn't render text");
 }

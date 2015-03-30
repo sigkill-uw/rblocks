@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <assert.h>
 
 #include <SDL.h>
 
@@ -32,6 +33,8 @@ void die(const char *msg)
 	fputs("Fatal error: ", stderr);
 	fputs(msg, stderr);
 	fputc('\n', stderr);
+
+	assert(0);
 	exit(1);
 }
 
@@ -41,7 +44,14 @@ void sdl_errdie(const char *msg)
 
 	foo = SDL_GetError();
 	if(foo && *foo)
+	{
+		prftime(stderr);
+		fputs("SDL Error: ", stderr);
+		fputs(foo, stderr);
+		fputc('\n', stderr);
+
 		die(msg);
+	}
 }
 
 void prtime(void)
@@ -52,10 +62,11 @@ void prtime(void)
 void prftime(FILE *f)
 {
 	time_t now;
-	char buffer[10 + 1 + 1]; /* "[xx:xx:xx] " */
+	char buffer[20 + 1];
 
 	now = time(NULL);
 
+	/* "[xx:xx:xx] " */
 	strftime(buffer, 12, "[%T] ", localtime(&now));
 	fputs(buffer, f);
 }

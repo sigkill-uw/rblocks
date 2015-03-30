@@ -74,7 +74,9 @@ for i in xrange(128):
 		for j in xrange(INTERNAL_SIZE):
 			b = bin(table[i][j])[2:]
 			b = "0b" + ("0" * (INTERNAL_SIZE - len(b))) + b
-			print "\t\t" + hex(table[i][j]) + ",\t/* " + b + " */"
+			h = hex(table[i][j])[2:]
+			h = "0x" + ("0" * (INTERNAL_SIZE / 4 - len(h))) + h
+			print "\t\t" + h + ",\t/* " + b + " */"
 		print "\t}" + ("," if i < 127 else "")
 
 print "};"

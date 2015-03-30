@@ -23,6 +23,7 @@
 
 void font_init(SDL_Renderer *r);
 void font_quit(void);
-void font_write(SDL_Renderer *r, const char *str, int x, int y, int scale);
+SDL_Texture *font_render(SDL_Renderer *r, const char *str, int size);
+void font_blit(SDL_Renderer *r, SDL_Texture *text, int x, int y);
 
 #endif

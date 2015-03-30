@@ -20,7 +20,7 @@ CC = gcc
 SOURCE = main.c game.c video.c nap.c common.c font.c icon.c
 OBJECTS = $(SOURCE:.c=.o)
 OUTPUT = rblocks
-CFLAGS = -Wall -Wextra -Werror -O4 -std=c99 -pedantic `sdl2-config --cflags --libs`
+CFLAGS = -Wall -Wextra -Werror -O4 -std=c99 -pedantic -ggdb `sdl2-config --cflags --libs`
 
 .PHONY: all
 .PHONY: clean

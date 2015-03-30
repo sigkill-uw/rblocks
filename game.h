@@ -19,14 +19,15 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-extern const int bucket_width;
-extern const int bucket_height;
+#define BUCKET_WIDTH	10
+#define BUCKET_HEIGHT	20
 
 typedef struct
 {
-	int no;
+	uint8_t grid[BUCKET_WIDTH][BUCKET_HEIGHT];
 } gamestate_t;
 
+void gamestate_init(gamestate_t *g);
 void gamestate_tick(gamestate_t *g);
 
 #endif

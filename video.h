@@ -23,6 +23,8 @@
 
 #include "game.h"
 
+void video_init(SDL_Renderer *r);
+void video_quit(void);
 void video_render(SDL_Renderer *r, gamestate_t *g);
 
 #endif
